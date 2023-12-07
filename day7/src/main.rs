@@ -45,7 +45,6 @@ impl Hand {
         counts.sort();
 
         if self.with_joker {
-
             let missing = 5 - counts.iter().sum::<usize>();
 
             match counts.last_mut() {
@@ -53,7 +52,6 @@ impl Hand {
                 Some(v) => *v += missing,
             }
         }
-
 
         match counts.as_slice() {
             [5] => HandType::FiveOfAKind,
@@ -95,7 +93,13 @@ fn parse_card(c: char, with_joker: bool) -> Result<Card, String> {
         '8' => Ok(Card::Eight),
         '9' => Ok(Card::Nine),
         'T' => Ok(Card::Ten),
-        'J' => { if with_joker {Ok(Card::Joker)} else {Ok(Card::Jack)}},
+        'J' => {
+            if with_joker {
+                Ok(Card::Joker)
+            } else {
+                Ok(Card::Jack)
+            }
+        }
         'Q' => Ok(Card::Queen),
         'K' => Ok(Card::King),
         'A' => Ok(Card::Ace),
@@ -114,7 +118,11 @@ fn parse_hand(line: &str, with_joker: bool) -> Result<Hand, String> {
 
     let bid = bid.parse::<u32>().map_err(|_| "Invalid bid format")?;
 
-    Ok(Hand { cards, bid , with_joker})
+    Ok(Hand {
+        cards,
+        bid,
+        with_joker,
+    })
 }
 
 fn part_one(input: &str) -> u32 {
