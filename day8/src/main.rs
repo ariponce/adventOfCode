@@ -1,12 +1,8 @@
+use num::integer::lcm;
 use std::collections::HashMap;
 
 fn main() {
     let input = include_str!("input");
-    println!("Part one: {}", part_one(input));
-}
-
-fn part_one(input: &str) -> u32 {
-    let mut steps = 0;
     let instructions = input.lines().next().unwrap();
     let nodes = input
         .lines()
@@ -14,6 +10,12 @@ fn part_one(input: &str) -> u32 {
         .filter_map(parse_line)
         .collect::<HashMap<_, _>>();
 
+    println!("Part one: {}", part_one(instructions, nodes.clone()));
+    println!("Part two: {}", part_two(instructions, nodes.clone()));
+}
+
+fn part_one(instructions: &str, nodes: HashMap<String, (String, String)>) -> u32 {
+    let mut steps = 0;
     let mut value: String = "AAA".to_string();
 
     while value != "ZZZ" {
@@ -36,6 +38,36 @@ fn part_one(input: &str) -> u32 {
     }
 
     steps
+}
+
+fn part_two(instructions: &str, nodes: HashMap<String, (String, String)>) -> usize {
+    let start_nodes: Vec<&String> = nodes.keys().filter(|k| k.ends_with('A')).collect();
+
+    let steps: Vec<usize> = start_nodes
+        .iter()
+        .map(|&start_node| {
+            let mut node = start_node.clone();
+            let mut i = 0;
+            while !node.ends_with('Z') {
+                for direction in instructions.chars() {
+                    if let Some((left, right)) = nodes.get(&node) {
+                        node = match direction {
+                            'L' => left.to_string(),
+                            'R' => right.to_string(),
+                            _ => continue,
+                        };
+                        i += 1;
+                    } else {
+                        println!("Unknown node: {}", node);
+                        break;
+                    }
+                }
+            }
+            i
+        })
+        .collect();
+
+    steps.iter().fold(1, |acc, &count| lcm(acc, count))
 }
 
 fn parse_line(line: &str) -> Option<(String, (String, String))> {
