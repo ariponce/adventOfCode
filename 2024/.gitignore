@@ -1,0 +1,6 @@
+*.beam
+*.ez
+/build
+erl_crash.dump
+/input/2024/*
+!/input/2024/.gitkeep
