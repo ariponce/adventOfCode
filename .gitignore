@@ -1,2 +1,7 @@
 /target
 */target
+*.beam
+*.ez
+/build
+erl_crash.dump
+.idea
