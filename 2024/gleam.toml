@@ -23,3 +23,7 @@ gleescript = ">= 1.4.0 and < 2.0.0"
 [gladvent.2024.1]
 pt_1 = 2196996
 pt_2 = 23655822
+
+[gladvent.2024.2]
+pt_1 = 356
+pt_2 = 413
